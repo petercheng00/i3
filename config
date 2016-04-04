@@ -9,6 +9,7 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+#Global variables
 set $mod Mod4
 
 set $left b
@@ -18,11 +19,10 @@ set $right f
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
+font pango:DejaVu Sans Mono 14
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -121,6 +121,10 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
+# scratchpad
+bindsym $mod+z move scratchpad
+bindsym $mod+x scratchpad show
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -154,8 +158,73 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+#colors
+# client.focused              #688060 #688060 #303030 #ffcfaf
+# client.focused_inactive     #3f3f3f #3F3F3F #7f9f7f #3f3f3f
+# client.unfocused            #3f3f3f #3F3F3F #DCDCCC #3f3f3f
+# client.urgent               #dca3a3 #dca3a3 #DCDCCC #3f3f3f
+
+client.focused          #525252 #1E1E1E #F5DEB3
+client.focused_inactive #333333 #0F0F0F #E3CCA1
+client.unfocused        #333333 #010101 #85753A
+client.urgent           #856E23 #900000 #F5DEB3
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+
+    # The command for the status line
+    status_command i3status
+
+    # The position of the bar (top/bottom)
+    position top
+
+    # font for the bar. ISO 10646 = Unicode
+    #font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+
+    # Specifies whether workspace buttons should be shown or not
+    workspace_buttons yes
+
+    colors {
+        background #0F0F0F
+        statusline #F5DEB3
+
+        focused_workspace  #F5DEB3 #666666
+        active_workspace   #F5DEB3 #0F0F0F
+        inactive_workspace #F5DEB3 #1E1E1E
+        urgent_workspace   #ffffff #900000
+    }
+
 }
+
+# i3lock
+bindsym $mod+l exec i3lock -c 000000
+
+# Mouse stuff
+focus_follows_mouse no
+
+# Audio
+exec --no-startup-id volnoti -t 2
+bindsym XF86AudioLowerVolume exec /home/pcheng/.config/i3/volume.sh down
+bindsym XF86AudioRaiseVolume exec /home/pcheng/.config/i3/volume.sh up
+bindsym XF86AudioMute exec /home/pcheng/.config/i3/volume.sh mute
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+# Horizontal scroll
+exec ~/.config/horiz-scroll
+
+# Network
+exec --no-startup-id nm-applet
+
+# Startup apps
+exec google-chrome
+exec emacs
